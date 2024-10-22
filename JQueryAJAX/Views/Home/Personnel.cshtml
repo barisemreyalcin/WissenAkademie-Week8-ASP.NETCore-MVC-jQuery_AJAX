@@ -1,0 +1,88 @@
+﻿@{
+	ViewData["Title"] = "Add Personnel";
+}
+
+<div class="bg-info text-white">
+	<h1 class="text-dark">Enter Personnel Information</h1>
+</div>
+<div class="row">
+	<div col-sm-6>
+		<div class="form-group">
+			<label>Name: </label>
+			<input type="text" class="form-control mb-3" id="txtName" placeholder="Enter your name" required />
+		</div>
+
+		<div class="form-group">
+			<label>Surname: </label>
+			<input type="text" class="form-control mb-3" id="txtSurname" placeholder="Enter your surname" required />
+		</div>
+
+		<div class="form-group">
+			<label>Identity Number: </label>
+			<input type="text" class="form-control mb-3" id="txtIdentityNumber" placeholder="Enter your identity number" required />
+		</div>
+
+		<div class="form-group">
+			<label>Department: </label>
+			<input type="text" class="form-control mb-3" id="txtDepartment" placeholder="Enter your department" required />
+		</div>
+
+		<div class="form-group">
+			<input type="submit" id="btnPersonnel" value="Add" class="btn btn-primary" />
+		</div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function() {
+		function openWindowWithPost(url, data) {
+			var form = document.createElement("form");
+			form.target = "_blank";
+			form.method = "POST";
+			form.action = url;
+			form.style.display = "none";
+
+			for (var key in data) {
+				var input = document.createElement("input");
+				input.type = "hidden";
+				input.name = key;
+				input.value = data[key];
+				form.appendChild(input);
+			}
+			document.body.appendChild(form);
+			form.submit();
+			document.body.removeChild(form);
+		}
+
+		$("#btnPersonnel").click(function () {
+			// alert("Clicked!");
+
+			var personnel = {
+				Name: $("#txtName").val(),
+				Surname: $("#txtSurname").val(),
+				IdentityNumber: $("#txtIdentityNumber").val(),
+				Department: $("#txtDepartment").val(),
+			};
+
+			var domain = "https://localhost:7194/";
+
+			$.ajax({
+				type: "POST",
+				url: "/Home/Personnel", // controller/action bu action json datayı döndürüyor
+				data: personnel,
+				dataType: "json",
+				success: function (data) {
+					var jsonData = JSON.stringify(data);
+					console.log(data);
+					alert("Personnel has been added successfully!"); 
+					openWindowWithPost(domain + "Home/PersonnelDetail", data); // detayı göstermesini sağlıyor (PersonnelDetail view'ını açan bir action ekledim Home içerisine)
+				},
+				error: function (data) {
+					console.log(data);
+					alert("Error! Personnel cannot be added...");
+				}
+			})
+		});
+
+	});
+</script>

@@ -1,0 +1,48 @@
+﻿@{
+	ViewData["Title"] = "Student Index";
+}
+
+<div class="row">
+	<h1 class="bg-info text-white">Student Index View</h1>
+</div>
+
+<div class="row">
+	<input type="text" id ="txtStudentID" />
+	<br />
+	<input type="button" value="Get Student" id ="getStudent" />
+</div>
+
+<div class="row">
+	<p>First Name: <strong id="FirstName"></strong></p>
+	<p>Last Name: <strong id="LastName"></strong></p>
+	<p>Student Number: <strong id="StudentNumber"></strong></p>
+	<p>Student Class: <strong id="Class"></strong></p>
+</div>
+
+<script>
+	$(document).ready(function () {
+		$("#getStudent").click(function () {
+			var id = $("#txtStudentID").val();
+			if (id == "") {
+				alert("Please, enter a student id...");
+				return;
+			}
+
+			$.ajax({
+				type: "POST",
+				url: "/Student/GetStudent/" + id,
+				dataType: "json",
+				success: function (data) {
+					$("#FirstName").html(data.firstName);
+					$("#LastName").html(data.lastName);
+					$("#StudentNumber").html(data.studentNumber);
+					$("#Class").html(data.studentClass);
+				},
+				error: function (req, status, error) {
+					alert("Error! Try again!");
+				}
+			})
+
+		})
+	})
+</script>

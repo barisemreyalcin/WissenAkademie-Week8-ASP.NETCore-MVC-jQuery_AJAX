@@ -1,0 +1,42 @@
+﻿@{
+	ViewData["Title"] = "Student List";
+}
+
+<div class="row">
+	<h1 class="bg-info text-white">Student List</h1>
+</div>
+
+<div class="row">
+	<input type="button" value="Get Students" id="getStudents" />
+</div>
+
+<div class="row">
+	<div id="StudentList">
+
+	</div>
+</div>
+
+<script>
+	$(document).ready(function () {
+		$("#getStudents").click(function () {
+			$.ajax({
+				type: "POST",
+				url: "/Student/GetAllStudents",
+				dataType: "json",
+				success: function (data) {
+					$.each(data, function (i, item) {
+						$("#StudentList").append(
+							"<div>First Name: <strong>" + item.firstName + "</strong><br />" +
+							"Last Name: <strong>" + item.lastName + "</strong><br />" +
+							"Student Number: <strong>" + item.studentNumber + "</strong><br />" +
+							"Class: <strong>" + item.studentClass + "</strong></div><hr/>"
+						)
+					})
+				},
+				error: function (req, status, error) {
+					console.log(error);
+				}
+			})
+		})
+	})
+</script>
